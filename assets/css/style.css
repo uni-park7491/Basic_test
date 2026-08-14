@@ -19,6 +19,14 @@
   --blob-3: #ffc9a6;
   --blob-alpha: 0.55;
   --radius: 22px;
+
+  /* iOS 스타일 글라스 — 유리판 본체, 위쪽 하이라이트, 아래쪽 그림자 */
+  --glass-fill: rgba(255, 255, 255, 0.55);
+  --glass-fill-strong: rgba(255, 255, 255, 0.78);
+  --glass-edge: rgba(255, 255, 255, 0.9);
+  --glass-rim: rgba(20, 18, 28, 0.1);
+  --glass-spec: rgba(255, 255, 255, 0.95);
+  --glass-drop: 0 1px 1px rgba(24, 20, 34, 0.06), 0 8px 20px rgba(24, 20, 34, 0.1);
 }
 
 [data-theme="dark"] {
@@ -36,6 +44,13 @@
   --blob-2: #16a394;
   --blob-3: #b0432f;
   --blob-alpha: 0.4;
+
+  --glass-fill: rgba(255, 255, 255, 0.08);
+  --glass-fill-strong: rgba(255, 255, 255, 0.14);
+  --glass-edge: rgba(255, 255, 255, 0.22);
+  --glass-rim: rgba(0, 0, 0, 0.5);
+  --glass-spec: rgba(255, 255, 255, 0.5);
+  --glass-drop: 0 1px 1px rgba(0, 0, 0, 0.35), 0 10px 24px rgba(0, 0, 0, 0.45);
 }
 
 /* ---------- Base ---------- */
@@ -325,9 +340,9 @@ a {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--bg-elev);
-  backdrop-filter: blur(20px) saturate(1.3);
-  -webkit-backdrop-filter: blur(20px) saturate(1.3);
-  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow: inset 0 1px 0 var(--glass-edge), var(--shadow-sm);
   overflow: hidden;
   isolation: isolate;
   animation: card-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
@@ -364,7 +379,7 @@ a {
 .card:hover {
   transform: translateY(-6px);
   border-color: color-mix(in srgb, var(--accent) 45%, var(--line-strong));
-  box-shadow: var(--shadow-lg);
+  box-shadow: inset 0 1px 0 var(--glass-edge), var(--shadow-lg);
 }
 
 .card:hover::after {
@@ -452,19 +467,22 @@ a {
 }
 
 .tag {
-  padding: 3px 10px;
+  padding: 4px 11px;
   border-radius: 999px;
-  border: 1px solid var(--line);
+  background: var(--glass-fill);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: inset 0 1px 0 var(--glass-edge), inset 0 0 0 1px var(--glass-rim);
   font-size: 11.5px;
   font-weight: 500;
-  color: var(--text-mute);
+  color: var(--text-soft);
 }
 
 /* ---------- Social links ---------- */
 .card__links {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   margin-top: auto;
   padding-top: 20px;
 }
@@ -479,28 +497,67 @@ a {
   background: var(--line);
 }
 
+/* iOS 스타일 유리 버튼.
+   유리판(배경 blur) → 위쪽 사면 하이라이트(::before) → 위에서 스치는 광택(::after)
+   세 겹을 쌓아 두께가 있는 유리처럼 보이게 합니다. */
 .social {
   --brand: var(--brand-light, var(--accent));
+  position: relative;
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
   color: var(--text-soft);
-  background: transparent;
-  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), color 0.22s ease,
-    background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  background: var(--glass-fill);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  box-shadow: inset 0 1px 0 var(--glass-edge),
+    inset 0 0 0 1px var(--glass-rim), var(--glass-drop);
+  overflow: hidden;
+  isolation: isolate;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.24s ease,
+    background 0.24s ease, box-shadow 0.28s ease;
 }
 
 [data-theme="dark"] .social {
   --brand: var(--brand-dark, var(--accent));
 }
 
+/* 유리 윗면에 고인 빛 */
+.social::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    170deg,
+    var(--glass-spec) 0%,
+    transparent 45%,
+    transparent 100%
+  );
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* hover 시 브랜드 색이 유리 안쪽에서 번지는 느낌 */
+.social::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(120% 100% at 50% 0%, var(--brand) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
 .social svg {
-  width: 18px;
-  height: 18px;
+  width: 19px;
+  height: 19px;
   fill: currentColor;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* 브랜드 로고가 아닌 직접 그린 아이콘(웹사이트·링크)은 선으로 그립니다 */
@@ -514,11 +571,27 @@ a {
 
 .social:hover,
 .social:focus-visible {
-  transform: translateY(-3px);
+  transform: translateY(-4px) scale(1.04);
   color: var(--brand);
-  background: color-mix(in srgb, var(--brand) 13%, transparent);
-  border-color: color-mix(in srgb, var(--brand) 42%, transparent);
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--brand) 22%, transparent);
+  background: var(--glass-fill-strong);
+  box-shadow: inset 0 1px 0 var(--glass-edge),
+    inset 0 0 0 1px color-mix(in srgb, var(--brand) 45%, var(--glass-rim)),
+    0 10px 24px color-mix(in srgb, var(--brand) 28%, transparent);
+}
+
+.social:hover::after,
+.social:focus-visible::after {
+  opacity: 0.22;
+}
+
+.social:hover svg {
+  transform: scale(1.08);
+}
+
+/* 손가락으로 누르는 순간 유리가 살짝 눌리는 반응 (iOS 느낌의 핵심) */
+.social:active {
+  transform: translateY(-1px) scale(0.94);
+  transition-duration: 0.09s;
 }
 
 /* ---------- Empty / Footer ---------- */
@@ -551,7 +624,64 @@ a {
   color: var(--text-soft);
 }
 
+.footer__lead {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+/* 멤버가 직접 자기 카드를 올리러 가는 입구 — 아이콘과 같은 유리 재질 */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 16px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: var(--glass-fill);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  box-shadow: inset 0 1px 0 var(--glass-edge),
+    inset 0 0 0 1px var(--glass-rim), var(--glass-drop);
+  color: var(--text);
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.24s ease, box-shadow 0.28s ease;
+}
+
+.cta svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.cta:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: var(--glass-fill-strong);
+  box-shadow: inset 0 1px 0 var(--glass-edge),
+    inset 0 0 0 1px var(--glass-rim), var(--shadow-lg);
+}
+
+.cta:active {
+  transform: translateY(-1px) scale(0.97);
+  transition-duration: 0.09s;
+}
+
+.footer__hint a {
+  color: var(--text-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .footer__count {
+  margin-top: 18px;
   letter-spacing: 0.18em;
   font-size: 11px;
   text-transform: uppercase;
