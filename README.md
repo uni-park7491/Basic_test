@@ -79,10 +79,36 @@
 - 저장소에 직접 올리려면 `assets/img/` 폴더에 넣고 `photo: "assets/img/내파일.jpg"`
 - 주소가 잘못돼서 사진을 못 불러와도 이니셜 아바타로 자연스럽게 대체됩니다.
 
-## 3. 배포하기 (GitHub Pages)
+## 3. 배포 (이미 자동으로 굴러갑니다)
 
-저장소 **Settings → Pages → Source** 를 `Deploy from a branch` 로 두고,
-브랜치를 `main` / 폴더를 `/ (root)` 로 지정하면 몇 분 뒤 공개 주소가 생성됩니다.
+### 공개 주소
+
+**https://uni-park7491.github.io/Basic_test/**
+
+로그인 없이 누구나 볼 수 있는 주소입니다. SNS 프로필 링크에 그대로 붙여 넣어도 됩니다.
+
+### 어떻게 배포되나요
+
+`main` 에 변경이 들어오면 `.github/workflows/deploy-pages.yml` 이 자동으로 돌면서
+그 내용을 `gh-pages` 브랜치로 밀어 넣고, GitHub Pages 가 이를 서빙합니다.
+**손으로 배포할 일은 없습니다.** 진행 상황은
+[Actions 탭](https://github.com/uni-park7491/Basic_test/actions)에서 볼 수 있습니다.
+
+> `gh-pages` 브랜치는 배포 결과물이라 워크플로가 통째로 덮어씁니다.
+> 내용을 고칠 때는 항상 `main` 을 고치세요.
+
+### Vercel 미러
+
+같은 사이트가 Vercel 에도 올라갑니다 (`basic-test-seven.vercel.app`).
+다만 이 프로젝트는 **Vercel Authentication** 이 켜져 있어 팀 계정으로 로그인해야 열립니다.
+외부 공유용으로는 위의 GitHub Pages 주소를 쓰세요.
+Vercel 주소도 공개하려면 Vercel 대시보드에서
+**Settings → Deployment Protection → Vercel Authentication** 을 끄면 됩니다.
+
+### 개인 도메인을 붙이고 싶다면
+
+도메인을 구매한 뒤 저장소 **Settings → Pages → Custom domain** 에 입력하고,
+도메인 DNS 에 `uni-park7491.github.io` 를 가리키는 CNAME 레코드를 추가하면 됩니다.
 
 ## 폴더 구조
 
