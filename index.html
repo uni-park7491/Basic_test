@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>우리들의 링크 · Social Profile Cards</title>
+  <meta name="description" content="우리 멤버들의 소셜 네트워크를 한 곳에. 아이콘을 누르면 바로 연결됩니다." />
+  <meta property="og:title" content="우리들의 링크" />
+  <meta property="og:description" content="우리 멤버들의 소셜 네트워크를 한 곳에." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+  />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%94%97%3C/text%3E%3C/svg%3E"
+  />
+</head>
+<body>
+  <div class="aurora" aria-hidden="true">
+    <span class="aurora__blob aurora__blob--1"></span>
+    <span class="aurora__blob aurora__blob--2"></span>
+    <span class="aurora__blob aurora__blob--3"></span>
+  </div>
+
+  <header class="hero">
+    <div class="hero__inner">
+      <button
+        id="themeToggle"
+        class="theme-toggle"
+        type="button"
+        aria-label="라이트/다크 모드 전환"
+        title="테마 전환"
+      >
+        <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+        <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2" />
+          <path d="M12 2v2.4M12 19.6V22M4.22 4.22l1.7 1.7M18.08 18.08l1.7 1.7M2 12h2.4M19.6 12H22M4.22 19.78l1.7-1.7M18.08 5.92l1.7-1.7" />
+        </svg>
+      </button>
+
+      <p class="hero__eyebrow">S O C I A L &nbsp;·&nbsp; C A R D S</p>
+      <h1 class="hero__title">우리들의 링크</h1>
+      <p class="hero__desc">
+        멤버들의 인스타그램과 여러 소셜 계정을 한 곳에 모았습니다.<br />
+        카드의 아이콘을 누르면 해당 프로필로 바로 이동해요.
+      </p>
+
+      <div class="toolbar">
+        <div class="search">
+          <svg class="search__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-3.6-3.6" />
+          </svg>
+          <input
+            id="search"
+            type="search"
+            class="search__input"
+            placeholder="닉네임 · 소개 · 키워드로 찾기"
+            autocomplete="off"
+            aria-label="멤버 검색"
+          />
+        </div>
+        <div id="tagFilter" class="chips" role="group" aria-label="키워드 필터"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="grid" class="grid" aria-live="polite"></div>
+    <p id="empty" class="empty" hidden>찾는 멤버가 없어요. 다른 키워드로 검색해 보세요.</p>
+  </main>
+
+  <footer class="footer">
+    <p>
+      나도 카드를 추가하고 싶다면 —
+      <code>data/members.js</code> 에 정보를 한 칸 추가하면 끝이에요.
+    </p>
+    <p class="footer__count"><span id="count">0</span> members</p>
+  </footer>
+
+  <script src="assets/js/icons.js"></script>
+  <script src="data/members.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
