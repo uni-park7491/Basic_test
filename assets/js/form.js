@@ -25,7 +25,77 @@
   var DEFAULT_KEYS = ["instagram", "youtube", "x"];
   var PLATFORMS = Object.keys(ICONS);
 
+  var photoInput = document.getElementById("photoInput");
+  var photoThumb = document.getElementById("photoThumb");
+  var photoClear = document.getElementById("photoClear");
+
   var chosenAccent = "";
+  var chosenPhoto = "";
+
+  /* ---------- 프로필 사진 ----------
+     휴대폰 사진은 수 MB라 그대로 두면 저장 한도를 넘깁니다.
+     가운데를 정사각형으로 잘라 256px JPEG 으로 줄여서 담습니다. */
+
+  var PHOTO_SIZE = 256;
+
+  function shrink(file, done) {
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      var img = new Image();
+
+      img.onload = function () {
+        var side = Math.min(img.width, img.height);
+        var canvas = document.createElement("canvas");
+        canvas.width = canvas.height = PHOTO_SIZE;
+
+        canvas
+          .getContext("2d")
+          .drawImage(
+            img,
+            (img.width - side) / 2, (img.height - side) / 2, side, side,
+            0, 0, PHOTO_SIZE, PHOTO_SIZE
+          );
+
+        done(canvas.toDataURL("image/jpeg", 0.82));
+      };
+
+      img.onerror = function () { done(null); };
+      img.src = reader.result;
+    };
+
+    reader.onerror = function () { done(null); };
+    reader.readAsDataURL(file);
+  }
+
+  function showPhoto(dataUrl) {
+    chosenPhoto = dataUrl || "";
+    photoThumb.style.backgroundImage = chosenPhoto ? 'url("' + chosenPhoto + '")' : "";
+    photoThumb.classList.toggle("is-set", !!chosenPhoto);
+    photoClear.hidden = !chosenPhoto;
+    updatePreview();
+  }
+
+  photoInput.addEventListener("change", function () {
+    var file = photoInput.files && photoInput.files[0];
+    if (!file) return;
+
+    shrink(file, function (dataUrl) {
+      if (!dataUrl) {
+        noteEl.textContent = "이 사진은 불러오지 못했어요. 다른 사진으로 해주세요.";
+        noteEl.className = "sheet__note is-warn";
+        return;
+      }
+      noteEl.textContent = "";
+      noteEl.className = "sheet__note";
+      showPhoto(dataUrl);
+    });
+  });
+
+  photoClear.addEventListener("click", function () {
+    photoInput.value = "";
+    showPhoto("");
+  });
 
   /* ---------- 색상 선택 ---------- */
 
@@ -114,7 +184,7 @@
       name: String(data.get("name") || "").trim(),
       role: String(data.get("role") || "").trim(),
       bio: String(data.get("bio") || "").trim(),
-      photo: String(data.get("photo") || "").trim(),
+      photo: chosenPhoto,
       accent: chosenAccent,
       tags: tags,
       links: links,
@@ -138,6 +208,8 @@
     chosenAccent = "";
     noteEl.textContent = "";
     noteEl.className = "sheet__note";
+    photoInput.value = "";
+    showPhoto("");
     buildSwatches();
     linkRowsEl.innerHTML = "";
     DEFAULT_KEYS.forEach(addLinkRow);

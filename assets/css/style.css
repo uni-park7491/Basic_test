@@ -842,6 +842,62 @@ a {
   line-height: 1.55;
 }
 
+/* ---------- 프로필 사진 고르기 ---------- */
+
+.photo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.photo__thumb {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--glass-fill) center / cover no-repeat;
+  box-shadow: inset 0 0 0 1px var(--glass-rim);
+}
+
+/* 사진을 고르기 전에는 자리 표시용 사람 실루엣을 보여 줍니다 */
+.photo__thumb:not(.is-set) {
+  background-image: radial-gradient(circle at 50% 36%, var(--text-mute) 0 22%, transparent 23%),
+    radial-gradient(ellipse at 50% 104%, var(--text-mute) 0 34%, transparent 35%);
+  opacity: 0.55;
+}
+
+.photo__acts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.photo__pick,
+.photo__clear {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 999px;
+  background: var(--glass-fill);
+  box-shadow: inset 0 0 0 1px var(--glass-rim);
+  color: var(--text-soft);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.photo__pick:hover,
+.photo__clear:hover {
+  color: var(--text);
+  background: var(--glass-fill-strong);
+}
+
+.photo__clear:hover {
+  color: #e0575b;
+}
+
 /* ---------- 색상 스와치 ---------- */
 
 .swatches {
