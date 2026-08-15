@@ -7,7 +7,31 @@
   "use strict";
 
   var ICONS = window.SOCIAL_ICONS || {};
-  var MEMBERS = Array.isArray(window.MEMBERS) ? window.MEMBERS : [];
+
+  /* data/members.js 에 커밋된 멤버 + 이 브라우저에서 폼으로 만든 멤버를 합쳐 보여줍니다 */
+  var LOCAL_KEY = "myCards";
+
+  function readLocal() {
+    try {
+      var raw = localStorage.getItem(LOCAL_KEY);
+      var parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function writeLocal(list) {
+    try {
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(list));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  var PUBLISHED = Array.isArray(window.MEMBERS) ? window.MEMBERS : [];
+  var MEMBERS = PUBLISHED.concat(readLocal());
 
   var gridEl = document.getElementById("grid");
   var emptyEl = document.getElementById("empty");
@@ -97,9 +121,18 @@
       .map(function (tag) { return '<span class="tag">#' + esc(tag) + "</span>"; })
       .join("");
 
+    /* 이 브라우저에서 만든 카드에는 지우기 버튼을 답니다 */
+    var localTools = member.__local
+      ? '<button class="card__remove" type="button" data-remove="' + esc(member.__local) +
+        '" aria-label="내 카드 지우기" title="내 카드 지우기">' +
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'
+      : "";
+
     return (
-      '<article class="card" style="--accent:' + esc(accent) +
+      '<article class="card' + (member.__local ? " card--mine" : "") +
+      '" style="--accent:' + esc(accent) +
       ";animation-delay:" + Math.min(index, 12) * 45 + 'ms">' +
+      localTools +
       '<div class="card__head">' + avatarHTML(member) +
       '<div class="card__id"><h2 class="card__name">' + esc(member.name) + "</h2>" +
       (member.role ? '<p class="card__role">' + esc(member.role) + "</p>" : "") +
@@ -145,26 +178,42 @@
         if (seen.indexOf(tag) === -1) seen.push(tag);
       });
     });
-    if (!seen.length) return;
 
-    tagFilterEl.innerHTML = ['<button class="chip" type="button" data-tag="" aria-pressed="true">전체</button>']
-      .concat(seen.map(function (tag) {
-        return '<button class="chip" type="button" data-tag="' + esc(tag) +
-          '" aria-pressed="false">' + esc(tag) + "</button>";
-      }))
-      .join("");
+    /* 선택해 둔 태그가 사라졌다면 필터를 풀어 줍니다 */
+    if (state.tag && seen.indexOf(state.tag) === -1) state.tag = "";
 
-    tagFilterEl.addEventListener("click", function (event) {
-      var button = event.target.closest(".chip");
-      if (!button) return;
-
-      state.tag = button.dataset.tag === state.tag ? "" : button.dataset.tag;
-      Array.prototype.forEach.call(tagFilterEl.children, function (chip) {
-        chip.setAttribute("aria-pressed", String(chip.dataset.tag === state.tag));
-      });
-      render();
-    });
+    tagFilterEl.innerHTML = !seen.length
+      ? ""
+      : ['<button class="chip" type="button" data-tag="" aria-pressed="' +
+         (state.tag ? "false" : "true") + '">전체</button>']
+          .concat(seen.map(function (tag) {
+            return '<button class="chip" type="button" data-tag="' + esc(tag) +
+              '" aria-pressed="' + (state.tag === tag) + '">' + esc(tag) + "</button>";
+          }))
+          .join("");
   }
+
+  tagFilterEl.addEventListener("click", function (event) {
+    var button = event.target.closest(".chip");
+    if (!button) return;
+
+    state.tag = button.dataset.tag === state.tag ? "" : button.dataset.tag;
+    Array.prototype.forEach.call(tagFilterEl.children, function (chip) {
+      chip.setAttribute("aria-pressed", String(chip.dataset.tag === state.tag));
+    });
+    render();
+  });
+
+  /* 내 카드 지우기 */
+  gridEl.addEventListener("click", function (event) {
+    var button = event.target.closest("[data-remove]");
+    if (!button) return;
+
+    var id = button.dataset.remove;
+    writeLocal(readLocal().filter(function (m) { return m.__local !== id; }));
+    MEMBERS = PUBLISHED.concat(readLocal());
+    refresh();
+  });
 
   /* ---------- 테마 ---------- */
 
@@ -184,15 +233,35 @@
 
   /* ---------- init ---------- */
 
-  setupTheme();
-  buildTagFilter();
-  render();
+  /* 멤버 목록이 바뀔 때마다 태그 · 카드 · 툴바를 한 번에 맞춥니다 */
+  function refresh() {
+    buildTagFilter();
+    render();
 
-  /* 카드가 하나도 없을 때 검색창만 덩그러니 남으면 고장 난 것처럼 보입니다 */
-  if (!MEMBERS.length) {
+    /* 카드가 하나도 없을 때 검색창만 덩그러니 남으면 고장 난 것처럼 보입니다 */
     var toolbarEl = document.querySelector(".toolbar");
-    if (toolbarEl) toolbarEl.hidden = true;
+    if (toolbarEl) toolbarEl.hidden = !MEMBERS.length;
   }
+
+  setupTheme();
+  refresh();
+
+  /* form.js 가 쓰는 창구 */
+  window.CARDS = {
+    palette: PALETTE,
+    cardHTML: cardHTML,
+
+    /* 폼에서 만든 카드를 이 브라우저에 저장하고 화면에 바로 띄웁니다 */
+    addLocal: function (member) {
+      var saved = readLocal();
+      member.__local = "m" + Date.now();
+      saved.push(member);
+      var ok = writeLocal(saved);
+      MEMBERS = PUBLISHED.concat(readLocal());
+      refresh();
+      return ok;
+    },
+  };
 
   searchEl.addEventListener("input", function () {
     state.query = searchEl.value.trim().toLowerCase();

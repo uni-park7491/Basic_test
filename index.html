@@ -78,21 +78,89 @@
 
   <footer class="footer">
     <p class="footer__lead">내 카드도 여기에 올리고 싶다면</p>
-    <a
-      class="cta"
-      href="https://github.com/uni-park7491/Basic_test/edit/main/data/members.js"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <button class="cta" type="button" id="openForm">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 5v14M5 12h14" />
       </svg>
       내 프로필 추가하기
-    </a>
+    </button>
   </footer>
+
+  <!-- ===== 프로필 작성 시트 ===== -->
+  <dialog class="sheet" id="profileDialog" aria-label="내 프로필 작성">
+    <form class="sheet__form" id="profileForm" method="dialog">
+      <header class="sheet__head">
+        <h2 class="sheet__title">내 프로필 만들기</h2>
+        <button class="sheet__close" type="button" id="closeForm" aria-label="닫기">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      </header>
+
+      <div class="sheet__body">
+        <div class="sheet__fields">
+          <label class="field">
+            <span class="field__label">닉네임 <em>*</em></span>
+            <input class="field__input" name="name" required maxlength="20" placeholder="예: 지은" autocomplete="off" />
+          </label>
+
+          <label class="field">
+            <span class="field__label">한 줄 역할</span>
+            <input class="field__input" name="role" maxlength="30" placeholder="예: Product Designer" autocomplete="off" />
+          </label>
+
+          <label class="field">
+            <span class="field__label">자기소개 한 줄</span>
+            <textarea class="field__input field__input--area" name="bio" maxlength="90" rows="2"
+              placeholder="예: 쓸모 있는 아름다움을 좋아합니다."></textarea>
+          </label>
+
+          <label class="field">
+            <span class="field__label">해시태그</span>
+            <input class="field__input" name="tags" maxlength="60" placeholder="디자인, 타이포, 모션" autocomplete="off" />
+            <span class="field__hint">쉼표로 구분하세요. # 은 자동으로 붙습니다.</span>
+          </label>
+
+          <label class="field">
+            <span class="field__label">프로필 사진 주소</span>
+            <input class="field__input" name="photo" placeholder="비워두면 닉네임 이니셜로 만들어져요" autocomplete="off" />
+          </label>
+
+          <fieldset class="field field--colors">
+            <span class="field__label">카드 포인트 색</span>
+            <div class="swatches" id="swatches"></div>
+          </fieldset>
+
+          <fieldset class="field">
+            <span class="field__label">소셜 링크</span>
+            <div class="links" id="linkRows"></div>
+            <button class="linkadd" type="button" id="addLink">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+              링크 추가
+            </button>
+          </fieldset>
+        </div>
+
+        <aside class="sheet__preview">
+          <span class="field__label">미리보기</span>
+          <div id="previewSlot" class="preview-slot"></div>
+        </aside>
+      </div>
+
+      <footer class="sheet__foot">
+        <p class="sheet__note" id="formNote"></p>
+        <div class="sheet__actions">
+          <button class="btn btn--ghost" type="button" id="cancelForm">취소</button>
+          <button class="btn btn--primary" type="submit">내 카드 만들기</button>
+        </div>
+      </footer>
+    </form>
+  </dialog>
 
   <script src="assets/js/icons.js"></script>
   <script src="data/members.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/form.js"></script>
 </body>
 </html>
