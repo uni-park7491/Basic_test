@@ -82,6 +82,11 @@ a {
   text-decoration: none;
 }
 
+/* display 를 지정한 요소(.toolbar 등)에도 hidden 속성이 통하도록 */
+[hidden] {
+  display: none !important;
+}
+
 :focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;

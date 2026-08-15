@@ -20,59 +20,21 @@
  * ============================================================ */
 
 window.MEMBERS = [
+  /* ↓ 아래 주석(//)을 지우고 값만 바꾸면 내 카드가 생깁니다.
+       여러 명이면 이 블록을 통째로 복사해서 이어 붙이세요. 쉼표(,)를 빠뜨리지 마세요.
+
   {
-    name: "지은",
-    role: "Product Designer",
-    bio: "쓸모 있는 아름다움을 좋아합니다. 요즘은 타이포그래피와 모션에 빠져 있어요.",
+    name: "닉네임",
+    role: "한 줄 역할",
+    bio: "자기소개 한 줄을 적어주세요.",
     photo: "",
-    accent: "#8b6ff5",
-    tags: ["디자인", "타이포", "모션"],
+    accent: "",
+    tags: ["해시태그", "해시태그"],
     links: {
-      instagram: "https://instagram.com/",
-      behance: "https://behance.net/",
-      threads: "https://threads.net/",
-      email: "hello@example.com",
+      instagram: "https://instagram.com/내아이디",
+      email: "me@example.com",
     },
   },
-  {
-    name: "MINHO",
-    role: "Frontend Engineer",
-    bio: "웹으로 만들 수 있는 건 다 만들어보는 중. 커피 한 잔이면 밤도 괜찮습니다.",
-    photo: "",
-    accent: "#2fb6a6",
-    tags: ["웹", "React", "사이드프로젝트"],
-    links: {
-      github: "https://github.com/",
-      x: "https://x.com/",
-      linkedin: "https://linkedin.com/in/",
-      website: "https://example.com",
-    },
-  },
-  {
-    name: "하루",
-    role: "Photographer",
-    bio: "빛이 좋은 날엔 무조건 밖으로. 필름과 디지털 반반씩 찍습니다.",
-    photo: "",
-    accent: "#e0803f",
-    tags: ["사진", "필름", "여행"],
-    links: {
-      instagram: "https://instagram.com/",
-      youtube: "https://youtube.com/",
-      pinterest: "https://pinterest.com/",
-    },
-  },
-  {
-    name: "SORA",
-    role: "Music / DJ",
-    bio: "새벽 4시의 사운드를 만듭니다. 플레이리스트 공유는 언제든 환영이에요.",
-    photo: "",
-    accent: "#d9557f",
-    tags: ["음악", "DJ", "플레이리스트"],
-    links: {
-      spotify: "https://open.spotify.com/",
-      soundcloud: "https://soundcloud.com/",
-      instagram: "https://instagram.com/",
-      tiktok: "https://tiktok.com/",
-    },
-  },
+
+  */
 ];

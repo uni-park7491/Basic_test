@@ -127,6 +127,13 @@
     var visible = MEMBERS.filter(matches);
     gridEl.innerHTML = visible.map(cardHTML).join("");
     emptyEl.hidden = visible.length > 0;
+
+    /* 아직 아무도 등록하지 않은 상태와, 검색 결과가 없는 상태는 다른 안내가 필요합니다 */
+    if (!visible.length) {
+      emptyEl.textContent = MEMBERS.length
+        ? "찾는 멤버가 없어요. 다른 키워드로 검색해 보세요."
+        : "아직 등록된 카드가 없어요. 아래 버튼을 눌러 첫 번째 주인공이 되어 주세요.";
+    }
   }
 
   /* ---------- 태그 필터 ---------- */
@@ -180,6 +187,12 @@
   setupTheme();
   buildTagFilter();
   render();
+
+  /* 카드가 하나도 없을 때 검색창만 덩그러니 남으면 고장 난 것처럼 보입니다 */
+  if (!MEMBERS.length) {
+    var toolbarEl = document.querySelector(".toolbar");
+    if (toolbarEl) toolbarEl.hidden = true;
+  }
 
   searchEl.addEventListener("input", function () {
     state.query = searchEl.value.trim().toLowerCase();
