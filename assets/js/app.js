@@ -13,7 +13,6 @@
   var emptyEl = document.getElementById("empty");
   var searchEl = document.getElementById("search");
   var tagFilterEl = document.getElementById("tagFilter");
-  var countEl = document.getElementById("count");
 
   /* accent 를 지정하지 않은 멤버에게 자동으로 배정되는 색 */
   var PALETTE = [
@@ -128,7 +127,6 @@
     var visible = MEMBERS.filter(matches);
     gridEl.innerHTML = visible.map(cardHTML).join("");
     emptyEl.hidden = visible.length > 0;
-    countEl.textContent = String(visible.length);
   }
 
   /* ---------- 태그 필터 ---------- */

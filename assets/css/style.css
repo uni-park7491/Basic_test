@@ -614,16 +614,6 @@ a {
   margin: 0 0 6px;
 }
 
-.footer code {
-  padding: 2px 7px;
-  border-radius: 6px;
-  border: 1px solid var(--line);
-  background: var(--bg-elev);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12px;
-  color: var(--text-soft);
-}
-
 .footer__lead {
   font-size: 15px;
   font-weight: 600;
@@ -674,18 +664,6 @@ a {
   transition-duration: 0.09s;
 }
 
-.footer__hint a {
-  color: var(--text-soft);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.footer__count {
-  margin-top: 18px;
-  letter-spacing: 0.18em;
-  font-size: 11px;
-  text-transform: uppercase;
-}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 520px) {
